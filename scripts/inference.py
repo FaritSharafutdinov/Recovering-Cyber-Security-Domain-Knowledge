@@ -13,6 +13,20 @@ def main():
     p.add_argument("--out", default="outputs/inference_outputs.json")
     p.add_argument("--max_queries", type=int, default=None)
     p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--model_id", default="unsloth/llama-3-8b-instruct-bnb-4bit")
+    p.add_argument(
+        "--default_system",
+        default="You are a helpful and precise cyber-security assistant. Answer the user's technical questions accurately.",
+    )
+    p.add_argument("--override_system", default=None)
+    p.add_argument("--max_new_tokens", type=int, default=512)
+    p.add_argument("--temperature", type=float, default=0.6)
+    p.add_argument("--top_p", type=float, default=0.9)
+    p.add_argument(
+        "--do_sample",
+        action="store_true",
+        help="Enable sampling. If omitted, generation is deterministic.",
+    )
     args = p.parse_args()
 
     random.seed(args.seed)
@@ -24,13 +38,11 @@ def main():
     from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
     from transformers import BitsAndBytesConfig
 
-    model_id = "unsloth/llama-3-8b-instruct-bnb-4bit"
-    tokenizer = AutoTokenizer.from_pretrained(model_id)
+    tokenizer = AutoTokenizer.from_pretrained(args.model_id)
     bnb = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype="float16")
-    model = AutoModelForCausalLM.from_pretrained(model_id, quantization_config=bnb, device_map="auto")
+    model = AutoModelForCausalLM.from_pretrained(args.model_id, quantization_config=bnb, device_map="auto")
     generator = pipeline("text-generation", model=model, tokenizer=tokenizer)
     terminators = [tokenizer.eos_token_id, tokenizer.convert_tokens_to_ids("<|eot_id|>")]
-    default_system = "You are a helpful and precise cyber-security assistant. Answer the user's technical questions accurately."
 
     with open(args.queries) as f:
         queries = json.load(f)
@@ -40,21 +52,31 @@ def main():
     results = []
     for i, entry in enumerate(queries):
         inst = entry.get("instruction", "")
-        sys_prompt = entry.get("system") or default_system
+        if args.override_system is not None:
+            sys_prompt = args.override_system
+        else:
+            sys_prompt = entry.get("system") or args.default_system
         messages = [
             {"role": "system", "content": sys_prompt},
             {"role": "user", "content": inst},
         ]
         out = generator(
             messages,
-            max_new_tokens=512,
+            max_new_tokens=args.max_new_tokens,
             eos_token_id=terminators,
-            do_sample=True,
-            temperature=0.6,
-            top_p=0.9,
+            do_sample=args.do_sample,
+            temperature=args.temperature,
+            top_p=args.top_p,
         )
         response = out[0]["generated_text"][-1]["content"]
-        results.append({"id": entry.get("id", i), "instruction": inst, "response": response})
+        results.append(
+            {
+                "id": entry.get("id", i),
+                "instruction": inst,
+                "system_prompt": sys_prompt,
+                "response": response,
+            }
+        )
         print(f"Done {i+1}/{len(queries)}: id={entry.get('id', i)}")
 
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
