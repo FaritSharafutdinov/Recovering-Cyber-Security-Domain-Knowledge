@@ -4,7 +4,7 @@ Project: Recovering Cyber-Security Domain Knowledge via LoRA Fine-Tuning.
 
 ## Repository layout
 
-- **scripts/** — `train.py` (sanity check), `inference.py` (baseline), `eval_refusal_rate.py` (refusal metric)
+- **scripts/** — `train.py` (sanity check), `inference.py` (baseline), `eval_refusal_rate.py` (refusal+tier metrics), `run_prompt_ablation.py`, `compare_refusal_reports.py`, `analyze_trigger_tokens.py`
 - **data/** — `queries.json`, `baseline_outputs.json`, `statistics.xlsx`, `query_tiers.json`, `prompt_profiles.json`, `baseline_refusal_labels.json`, `trigger_tokens.json`
 - **notebooks/** — `baseline_testing.ipynb` (if run from repo root, use paths like \texttt{data/queries.json})
 - **reports/** — baseline report (PDF + LaTeX). To rebuild PDF: `pdflatex reports/baseline_report.tex`
