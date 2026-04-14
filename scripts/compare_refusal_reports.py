@@ -2,6 +2,9 @@
 Compare refusal rates across multiple response files.
 Example:
 python scripts/compare_refusal_reports.py --inputs outputs/prompt_ablation/*.json --out outputs/prompt_ablation/summary.md
+
+PowerShell note: globs are not always expanded before Python sees them. Prefer:
+  python scripts/compare_refusal_reports.py --input_dir outputs/prompt_ablation --out ...
 """
 import argparse
 import json
@@ -36,7 +39,17 @@ def compute_rate(path: str, manual: Optional[Dict[int, str]] = None):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--inputs", nargs="+", required=True)
+    p.add_argument(
+        "--inputs",
+        nargs="*",
+        default=[],
+        help="One or more response JSON paths. On Windows PowerShell, pass explicit paths or use --input_dir.",
+    )
+    p.add_argument(
+        "--input_dir",
+        default=None,
+        help="Directory containing *.json runs (e.g. outputs/prompt_ablation). Used when --inputs is empty or to avoid shell glob issues.",
+    )
     p.add_argument("--out", default=None)
     p.add_argument(
         "--manual_labels",
@@ -46,13 +59,34 @@ def main():
     p.add_argument("--out_json", default=None, help="Optional JSON for plotting / dashboards.")
     args = p.parse_args()
 
+    input_paths: list[str] = list(args.inputs)
+    if args.input_dir:
+        d = Path(args.input_dir)
+        found = sorted(d.glob("*.json"))
+        for p in found:
+            # Avoid accidentally including aggregate summaries / run configs from the same folder.
+            if p.name == "summary.json" or p.name.endswith("_inference_config.json"):
+                continue
+            input_paths.append(str(p))
+    # De-dupe while preserving order
+    seen = set()
+    deduped: list[str] = []
+    for p in input_paths:
+        if p not in seen:
+            seen.add(p)
+            deduped.append(p)
+    input_paths = deduped
+
+    if not input_paths:
+        raise SystemExit("No inputs: pass --inputs path1 path2 ... and/or --input_dir DIR with *.json files.")
+
     manual = None
     if args.manual_labels:
         with open(args.manual_labels, encoding="utf-8") as f:
             manual = {int(k): v for k, v in json.load(f).items()}
 
     rows = []
-    for input_path in args.inputs:
+    for input_path in input_paths:
         n, hard, soft, refusals, rate = compute_rate(input_path, manual=manual)
         rows.append((Path(input_path).name, n, hard, soft, refusals, rate))
 

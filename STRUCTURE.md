@@ -20,9 +20,9 @@
 | `train.py` | TinyLlama LoRA sanity + rank/module/dataset-size knobs; writes `run_config.json`. |
 | `eval_refusal_rate.py` | Refusal counts, bootstrap CI, tier table, Markdown export. |
 | `eval_paired_bootstrap.py` | Paired bootstrap on refusal deltas (baseline vs candidate JSON). |
-| `compare_refusal_reports.py` | Multi-file refusal ranking; Markdown + JSON. |
+| `compare_refusal_reports.py` | Multi-file refusal ranking; Markdown + JSON. Supports `--input_dir` (PowerShell-friendly; avoids broken `*.json` glob expansion). |
 | `plot_refusal_rates.py` | Bar chart from compare JSON. |
-| `run_prompt_ablation.py` | Subprocess driver over `prompt_profiles.json`. |
+| `run_prompt_ablation.py` | Subprocess driver over `prompt_profiles.json` (uses `sys.executable`; forward GPU flags via `--infer_extra`). |
 | `analyze_trigger_tokens.py` | Trigger-token conditional refusal rates. |
 | `retrieval_augment_queries.py` | TF–IDF RAG-style query augmentation. |
 | `hf_dataset_to_queries.py` | Sample HF dataset → `queries.json` format. |

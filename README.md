@@ -27,6 +27,19 @@ Project: Recovering Cyber-Security Domain Knowledge via LoRA Fine-Tuning.
 
 From the **repository root**:
 
+### Windows / RTX troubleshooting (read this first)
+
+- **`outputs/` is gitignored** (see `.gitignore`). New files **still appear on disk**, but many IDEs hide ignored folders from the file tree. Check with Explorer or: `Get-ChildItem outputs -Recurse` (PowerShell) / `dir outputs /s` (cmd).
+- **PowerShell glob pitfall**: `outputs/prompt_ablation/*.json` is **not always expanded** before Python sees it. Prefer:
+  - `python scripts/compare_refusal_reports.py --input_dir outputs/prompt_ablation --out ... --out_json ...`
+- **`run_prompt_ablation.py` must forward GPU flags** to `inference.py` (it calls inference as a subprocess). Example:
+
+```powershell
+python scripts/run_prompt_ablation.py --infer_extra "--model_id unsloth/llama-3-8b-instruct-bnb-4bit --load_in_4bit --device cuda"
+```
+
+- **If `python` behaves oddly** (Store alias / wrong interpreter), use the same interpreter explicitly, e.g. `py -3 ...` or your conda `python.exe` path, and verify with `where.exe python` / `python -c "import sys; print(sys.executable)"`.
+
 - **Offline/no-GPU demo (recommended on a laptop)**: `python scripts/run_offline_demo.py` — generates evidence artifacts in `outputs/offline_demo/` without downloading or running a model:
   - refusal report with bootstrap CI + difficulty tiers
   - trigger-token sensitivity table
@@ -49,15 +62,15 @@ From the **repository root**:
   - Export a labeling sheet: `python scripts/export_manual_eval_sheet.py --queries data/queries.json --responses <RUN.json> --out outputs/manual_eval/sheet.json`
 - **Paired refusal delta + CI**: `python scripts/eval_paired_bootstrap.py --baseline data/baseline_outputs.json --candidate outputs/candidate.json --manual_labels data/baseline_refusal_labels.json` — bootstrap on per-id refusal differences.
 - **Train sweep plan (no GPU)**: `python scripts/render_train_sweep.py --matrix configs/train_sweep.example.json` — prints `train.py` command lines from a JSON job list.
-- **LLM judge stub**: `python scripts/llm_judge.py --input data/baseline_outputs.json --out outputs/stub_judge_labels.json` — placeholder verdicts for pipeline wiring.
+- **LLM judge stub (optional / not required for grading)**: `python scripts/llm_judge.py ...` — placeholder only; prefer `MANUAL_EVALUATION_PROTOCOL.md` if you have no API budget.
 - **Refusal + tier evaluation**: `python scripts/eval_refusal_rate.py` — reads a responses JSON and prints:
   - total / hard / soft refusals;
   - refusal rate with 95% bootstrap CI;
   - breakdown by difficulty tiers from `data/query_tiers.json`.
   - Optional Markdown export: `--save_markdown outputs/eval_report.md`.
   - Optional manual labels from baseline report: `--manual_labels data/baseline_refusal_labels.json`.
-- **Prompt-engineering ablation**: `python scripts/run_prompt_ablation.py` — runs inference for all profiles in `data/prompt_profiles.json`, stores outputs in `outputs/prompt_ablation/`.
-- **Compare prompt runs**: `python scripts/compare_refusal_reports.py --inputs outputs/prompt_ablation/*.json --out outputs/prompt_ablation/summary.md --out_json outputs/prompt_ablation/summary.json` — ranking by refusal rate; JSON feeds plotting.
+- **Prompt-engineering ablation**: `python scripts/run_prompt_ablation.py` — runs inference for all profiles in `data/prompt_profiles.json`, stores outputs in `outputs/prompt_ablation/`. On GPU machines pass model flags via `--infer_extra` (see troubleshooting above).
+- **Compare prompt runs**: `python scripts/compare_refusal_reports.py --input_dir outputs/prompt_ablation --out outputs/prompt_ablation/summary.md --out_json outputs/prompt_ablation/summary.json` — ranking by refusal rate; JSON feeds plotting. (You can still pass explicit `--inputs` paths if you prefer.)
   - Optional `--manual_labels data/baseline_refusal_labels.json` for consistent labels across files.
 - **Trigger token sensitivity**: `python scripts/analyze_trigger_tokens.py --queries data/queries.json --responses data/baseline_outputs.json --manual_labels data/baseline_refusal_labels.json --out outputs/trigger_token_report.md` — estimates which keywords are most associated with refusals.
 - **RAG-style augmentation (prototype)**: `python scripts/retrieval_augment_queries.py --queries data/queries.json --corpus data/rag_corpus.json --out outputs/queries_rag_augmented.json` then `python scripts/inference.py --queries outputs/queries_rag_augmented.json --out outputs/rag_outputs.json`. Uses offline TF–IDF over the in-repo corpus (no FAISS/Chroma required).
