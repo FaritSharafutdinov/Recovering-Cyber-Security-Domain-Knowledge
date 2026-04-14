@@ -124,19 +124,19 @@ This maps the numbered research extensions from the project proposal (e.g. repor
 
 | # | Extension | Status | Where / how |
 |---|-----------|--------|-------------|
-| 1 | Prompt engineering vs LoRA | partial | Prompt side: `prompt_profiles.json`, `run_prompt_ablation.py`, `compare_refusal_reports.py`, same metrics via `eval_refusal_rate.py`. LoRA side: run `train.py` / full trainer, export responses, compare on identical queries. |
-| 2 | RAG vs fine-tuning | partial | `retrieval_augment_queries.py`, `data/rag_corpus.json`, then same evaluation stack. Swap in FAISS/Chroma + larger corpus when resources allow. |
-| 3 | Dataset size ablation (LoRA) | partial | `train.py --n_train …` varies subset size; scaling to 100–5000 pairs needs the full training dataset + GPU budget. |
-| 4 | Catastrophic forgetting | partial | `mcq_to_queries.py`, `general_capability_mcq.json`, `eval_mcq_probe.py` + optional `lm-evaluation-harness` / MMLU for a stronger version. |
-| 5 | LoRA layer / module ablation | partial | `train.py --target_modules …` (e.g. attention-only vs add MLP if supported by base model keys). |
-| 6 | LoRA rank ablation | partial | `train.py --lora_r …` |
+| 1 | Prompt engineering vs LoRA | partial | **Prompt path done:** `prompt_profiles.json`, `run_prompt_ablation.py`, `compare_refusal_reports.py`, `eval_refusal_rate.py`, `run_experiment_suite.py` (`--with_prompt_ablation`). **LoRA path:** `train.py` (+ `--save_adapter`, `inference.py --lora_adapter`); full *same-backbone* Llama‑3 LoRA vs prompt on `queries.json` is still a GPU budget / training-data choice (default trainer remains TinyLlama sanity). |
+| 2 | RAG vs fine-tuning | done | **RAG done:** `retrieval_augment_queries.py` (`--mode tfidf` or `embedding_faiss`), `build_rag_index.py` (FAISS CPU + `sentence-transformers`), `nvdcve_to_rag_corpus.py` + `data/rag_corpus.json` / `.jsonl`, same eval stack as baseline. **vs fine-tuning:** compare runs via `eval_refusal_rate.py` / `eval_paired_bootstrap.py` once response JSONs exist (`run_experiment_suite.py --preset full`). |
+| 3 | Dataset size ablation (LoRA) | partial | `train.py --n_train …` / `--max_steps`; large-scale 100–5000+ pairs still needs curated dataset + GPU time. |
+| 4 | Catastrophic forgetting | done | **In-repo:** `mcq_to_queries.py`, `general_capability_mcq.json`, `eval_mcq_probe.py`; **MMLU-style:** `build_mmlu_subset.py` → `data/mmlu_eval_100.json` + suite wiring. Optional external harness (`lm-evaluation-harness`, full MMLU) remains out of scope. |
+| 5 | LoRA layer / module ablation | partial | `train.py --target_modules …`; full matrix of runs is an experiment schedule, not a single command. |
+| 6 | LoRA rank ablation | partial | `train.py --lora_r …`; same note as row 5. |
 | 7 | Trigger-token analysis | done | `analyze_trigger_tokens.py`, `trigger_tokens.json` |
-| 8 | LLM-as-judge evaluation | partial | Heuristic + manual labels today; `eval_response_taxonomy.py` adds structured proxies. Plug in a remote judge model behind a small wrapper when API keys are available. |
-| 9 | Standard / larger benchmark | partial | `hf_dataset_to_queries.py`; core paper still uses `queries.json` (50) for controlled comparison. |
+| 8 | LLM-as-judge evaluation | partial | Manual protocol (`MANUAL_EVALUATION_PROTOCOL.md`) + heuristics + `eval_response_taxonomy.py`; `llm_judge.py` stub only until API-backed judge is wired. |
+| 9 | Standard / larger benchmark | done | **`queries.json` (50)** kept for controlled cyber comparison; **additions:** `build_mmlu_subset.py`, `build_ctf_eval_subset.py` (`data/ctf_eval_50.json` + manifest), `hf_dataset_to_queries.py` for open-ended HF sampling. Orchestrated by `run_experiment_suite.py`. |
 | 10 | Difficulty tier analysis | done | `query_tiers.json`, `eval_refusal_rate.py` tier table |
-| 11 | Statistical significance | done | Bootstrap CI in `eval_refusal_rate.py` |
-| 12 | Reproducibility protocol | done | Seeds, deterministic decoding default, documented CLI |
-| 13 | Error / response taxonomy | partial | Hard/soft + `eval_response_taxonomy.py`; hallucination requires expert or LLM judge |
+| 11 | Statistical significance | done | Bootstrap CI in `eval_refusal_rate.py`; paired deltas in `eval_paired_bootstrap.py` |
+| 12 | Reproducibility protocol | done | Seeds, deterministic decoding default, `smoke_test.py`, `run_experiment_suite.py`, `EXPERIMENTS.md` / `outputs/experiment_manifest.json`, documented CLI |
+| 13 | Error / response taxonomy | partial | Hard/soft + `eval_response_taxonomy.py`; deep hallucination / safety judging still needs expert or paid LLM judge |
 
 Install: `pip install -r requirements.txt`
 
