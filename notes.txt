@@ -1,0 +1,29 @@
+﻿Please ensure your final submission package includes the following components:
+ 
+1. Final Report & References
+* Length: 6–10 pages (excluding references).
+* Format: PDF.
+* Citations: A complete list of all references used must be included at the end.
+ 
+2. Reproducible Code & Instructions
+* Execution: The code must be reproducible and run end-to-end without errors.
+* Documentation: You must include a README file or a set of clear instructions on how to install dependencies and execute the scripts.
+What we check:
+- Correctness of objective + implementation
+- Reproducibility (can we run it?)
+- Evidence: plots, metrics, failure analysis
+-  Understanding (you explain key choices)
+Theory report (must include)
+Model definition, training objective, optimization details, evaluation protocol, and at least one
+ablation or controlled comparison.
+
+
+Important note! :
+"Смысл репортов: показать что мы разобрались и в практике и в теории.
+Примеры того как показать что шарим за теорию: объяснить почему такой результат отталкиваясь от семейства алгоритмов, математики, объяснить математические ограничения которые показываются в результатах.
+
+
+Выводы о проекте делает по сабмишенам и в целом по представлению о стараниях студентов.
+
+
+На защите: будут вопросы по коду и по репортам, так что очень внимательно читать что пишем чтобы было что отвечать и не попасть в неловкую ситуацию"

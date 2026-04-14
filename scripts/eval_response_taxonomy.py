@@ -51,17 +51,28 @@ def answer_shape(refusal: str, text: str) -> str:
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--input", default="data/baseline_outputs.json")
+    p.add_argument(
+        "--manual_labels",
+        default=None,
+        help="Optional JSON mapping query id -> {hard|soft|none} to override heuristic refusal labels.",
+    )
     p.add_argument("--out", default=None)
     args = p.parse_args()
 
     with open(args.input, encoding="utf-8") as f:
         data = json.load(f)
 
+    manual = None
+    if args.manual_labels:
+        with open(args.manual_labels, encoding="utf-8") as f:
+            manual = {int(k): v for k, v in json.load(f).items()}
+
     counts = {"hard": 0, "soft": 0, "none": 0}
     shapes = {"refusal": 0, "brief": 0, "substantive": 0}
     for item in data:
         resp = item.get("response", "")
-        lab = classify_refusal(resp)
+        qid = int(item.get("id", -1))
+        lab = manual.get(qid, classify_refusal(resp)) if manual else classify_refusal(resp)
         counts[lab] = counts.get(lab, 0) + 1
         sh = answer_shape(lab, resp)
         shapes[sh] = shapes.get(sh, 0) + 1
@@ -76,6 +87,7 @@ def main():
             "# Response taxonomy (automated)",
             "",
             f"- Input: `{args.input}`",
+            f"- Manual labels: `{args.manual_labels}`" if args.manual_labels else "- Manual labels: not used",
             f"- Total: **{n}**",
             "",
             "## Aggregate counts",
@@ -90,9 +102,9 @@ def main():
             lines.append(f"| {k} | {shapes[k]} |")
         lines.extend(["", "## Per-item table", "", "| id | refusal | shape | usefulness_proxy | wc |", "|---|---|:---:|---:|---:|"])
         for item in data:
-            qid = item.get("id", "")
+            qid = int(item.get("id", -1))
             resp = item.get("response", "")
-            lab = classify_refusal(resp)
+            lab = manual.get(qid, classify_refusal(resp)) if manual else classify_refusal(resp)
             sh = answer_shape(lab, resp)
             up = usefulness_proxy(lab, resp)
             wc = len(resp.split())

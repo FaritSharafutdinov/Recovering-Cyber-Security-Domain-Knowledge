@@ -27,12 +27,26 @@ Project: Recovering Cyber-Security Domain Knowledge via LoRA Fine-Tuning.
 
 From the **repository root**:
 
+- **Offline/no-GPU demo (recommended on a laptop)**: `python scripts/run_offline_demo.py` — generates evidence artifacts in `outputs/offline_demo/` without downloading or running a model:
+  - refusal report with bootstrap CI + difficulty tiers
+  - trigger-token sensitivity table
+  - response taxonomy table
+  - RAG-augmented queries JSON (for later GPU inference)
+  - MCQ probe queries JSON (for later GPU inference)
+  - a comparison plot (baseline vs a masked worst-case candidate) to demonstrate reporting/plotting flow
+
 - **LoRA sanity check / small ablations**: `python scripts/train.py` — default: TinyLlama + LoRA on 5 examples, ~20 steps. Loss is logged each step. Knobs for proposal-style studies:
   - `--lora_r`, `--lora_alpha`, `--target_modules` (comma-separated, e.g. `q_proj,v_proj` vs `q_proj,k_proj,v_proj,o_proj`), `--n_train` (subset size from `data/baseline_outputs.json`), `--max_steps`, `--seed`, `--output_dir`.
-- **Baseline inference**: `python scripts/inference.py` — runs 4-bit Llama-3-8B-Instruct on `data/queries.json`, writes `outputs/inference_outputs.json`.
+  - To save an adapter for later inference: add `--save_adapter` (writes `<output_dir>/adapter/`).
+- **Baseline inference**: `python scripts/inference.py` — runs inference on `data/queries.json`, writes `outputs/inference_outputs.json`.
   - Reproducibility controls: `--seed`, deterministic mode by default (`--do_sample` enables sampling), and explicit generation settings (`--temperature`, `--top_p`, `--max_new_tokens`).
   - Prompt controls: `--default_system` and `--override_system` for controlled prompt-engineering experiments.
   - Config snapshot: `--save_run_config` (omit value to write `<out_stem>_inference_config.json` next to `--out`).
+  - Laptop/offline notes: use `--offline` to avoid any HuggingFace network calls (requires the model to be already cached locally).
+  - To apply a trained LoRA adapter: pass `--lora_adapter <output_dir>/adapter`.
+
+- **Manual evaluation protocol (no API keys)**: see `MANUAL_EVALUATION_PROTOCOL.md`.
+  - Export a labeling sheet: `python scripts/export_manual_eval_sheet.py --queries data/queries.json --responses <RUN.json> --out outputs/manual_eval/sheet.json`
 - **Paired refusal delta + CI**: `python scripts/eval_paired_bootstrap.py --baseline data/baseline_outputs.json --candidate outputs/candidate.json --manual_labels data/baseline_refusal_labels.json` — bootstrap on per-id refusal differences.
 - **Train sweep plan (no GPU)**: `python scripts/render_train_sweep.py --matrix configs/train_sweep.example.json` — prints `train.py` command lines from a JSON job list.
 - **LLM judge stub**: `python scripts/llm_judge.py --input data/baseline_outputs.json --out outputs/stub_judge_labels.json` — placeholder verdicts for pipeline wiring.

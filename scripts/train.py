@@ -34,6 +34,11 @@ def main():
     p.add_argument("--data_path", default="data/baseline_outputs.json")
     p.add_argument("--n_train", type=int, default=5, help="Number of instruction-response pairs from the start of the file.")
     p.add_argument("--model_name", default="TinyLlama/TinyLlama-1.1B-Chat-v1.0")
+    p.add_argument(
+        "--save_adapter",
+        action="store_true",
+        help="Save the trained LoRA adapter to <output_dir>/adapter so it can be loaded in inference.",
+    )
     p.add_argument("--lora_r", type=int, default=8)
     p.add_argument("--lora_alpha", type=int, default=16)
     p.add_argument(
@@ -103,6 +108,13 @@ def main():
     trainer = Trainer(model=model, args=targs, train_dataset=train_data)
     trainer.train()
 
+    adapter_dir = out_dir / "adapter"
+    if args.save_adapter:
+        adapter_dir.mkdir(parents=True, exist_ok=True)
+        # Save only the LoRA adapter weights/config (not the full base model).
+        model.save_pretrained(str(adapter_dir))
+        tokenizer.save_pretrained(str(adapter_dir))
+
     versions = {"python": sys.version.split()[0], "torch": torch.__version__}
     try:
         import transformers
@@ -121,6 +133,8 @@ def main():
         "model_name": args.model_name,
         "data_path": args.data_path,
         "n_train": args.n_train,
+        "save_adapter": bool(args.save_adapter),
+        "adapter_dir": str(adapter_dir) if args.save_adapter else None,
         "lora_r": args.lora_r,
         "lora_alpha": args.lora_alpha,
         "lora_dropout": args.lora_dropout,
@@ -134,6 +148,8 @@ def main():
     (out_dir / "run_config.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
     print("\nTraining finished.")
     print(f"Config written to {out_dir / 'run_config.json'}")
+    if args.save_adapter:
+        print(f"Adapter saved to {adapter_dir}")
 
 
 if __name__ == "__main__":
