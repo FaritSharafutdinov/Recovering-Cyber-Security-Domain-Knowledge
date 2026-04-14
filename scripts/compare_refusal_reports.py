@@ -19,6 +19,19 @@ if str(_SCRIPT_DIR) not in sys.path:
 from lib.refusal import classify_refusal
 
 
+def _is_response_run_file(path: Path) -> bool:
+    """Skip aggregate manifests / configs when scanning --input_dir."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return False
+    if not isinstance(data, list) or not data:
+        return False
+    row0 = data[0]
+    return isinstance(row0, dict) and ("response" in row0 or "instruction" in row0)
+
+
 def compute_rate(path: str, manual: Optional[Dict[int, str]] = None):
     with open(path, encoding="utf-8") as f:
         data = json.load(f)
@@ -66,6 +79,8 @@ def main():
         for p in found:
             # Avoid accidentally including aggregate summaries / run configs from the same folder.
             if p.name == "summary.json" or p.name.endswith("_inference_config.json"):
+                continue
+            if not _is_response_run_file(p):
                 continue
             input_paths.append(str(p))
     # De-dupe while preserving order

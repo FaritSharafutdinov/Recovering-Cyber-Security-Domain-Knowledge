@@ -8,7 +8,7 @@ Project: Recovering Cyber-Security Domain Knowledge via LoRA Fine-Tuning.
 
 - **scripts/** — CLIs (see [STRUCTURE.md](STRUCTURE.md)); shared code in **`scripts/lib/`** (`refusal`, `bootstrap`, `tiers`, `responses`).
 - **configs/** — JSON manifests for LoRA/command sweeps (`train_sweep.example.json`, `seeds.example.json`).
-- **data/** — `queries.json`, `baseline_outputs.json`, `statistics.xlsx`, `query_tiers.json`, `prompt_profiles.json`, `baseline_refusal_labels.json`, `trigger_tokens.json`, `rag_corpus.json` (small security knowledge base for RAG prototype), `general_capability_mcq.json` (non-cyber MCQ probe for forgetting-style checks)
+- **data/** — `queries.json`, `baseline_outputs.json`, … **`rag_corpus.json`** is built from **NIST NVD** CVE JSON feeds (`nvdcve-2.0-*.json`) via `scripts/nvdcve_to_rag_corpus.py` (English description + CVE id + published date; heavy fields like configurations/CVSS JSON are dropped). Short **tutorial** snippets live in `data/rag_corpus_education.json` and are prepended when using `--merge-education`. For a **full** multi-year corpus use `--format jsonl` and point `--corpus` at that file. **Other generated files:** `mmlu_eval_100.json`, `ctf_eval_50.json` + manifest (see respective builders).
 - **notebooks/** — `baseline_testing.ipynb` (if run from repo root, use paths like \texttt{data/queries.json})
 - **reports/** — baseline report (PDF + LaTeX). To rebuild PDF: `pdflatex reports/baseline_report.tex`
 
@@ -37,6 +37,26 @@ From the **repository root**:
 ```powershell
 python scripts/run_prompt_ablation.py --infer_extra "--model_id unsloth/llama-3-8b-instruct-bnb-4bit --load_in_4bit --device cuda"
 ```
+
+- **End-to-end experiment suite (master script):** `python scripts/run_experiment_suite.py` writes `outputs/experiment_manifest.json` and refreshes [EXPERIMENTS.md](EXPERIMENTS.md). **`--preset full`** turns on index build, `--ensure_all_datasets`, and all modes (`baseline_queries`, `rag_tfidf`, `rag_faiss`, `mmlu`, `ctf`). Optional **`--with_prompt_ablation`** (slow). Typical GPU run:
+
+```powershell
+python scripts/run_experiment_suite.py --preset full --infer_extra "--model_id unsloth/llama-3-8b-instruct-bnb-4bit --load_in_4bit --device cuda"
+```
+
+- **Quick health check (no LLM inference):** `python scripts/smoke_test.py` — artifacts under `outputs/smoke_ci/`.
+
+Dry run (index + datasets + augment, **skip** inference): add `--skip_inference`. To build `data/mmlu_eval_100.json` / `data/ctf_eval_50.json` without listing those modes: `--ensure_all_datasets`.
+
+- **Rebuild RAG corpus from NVD feeds (streaming, large files safe):**
+  ```powershell
+  python scripts/nvdcve_to_rag_corpus.py --inputs data/nvdcve-2.0-2024.json data/nvdcve-2.0-2025.json data/nvdcve-2.0-2026.json `
+    --out data/rag_corpus.json --format json --max-nvd 12000 --merge-education data/rag_corpus_education.json
+  ```
+  Use `--format jsonl` and omit `--max-nvd` to emit **all** CVE rows to e.g. `data/rag_corpus_nvd.jsonl` (recommended for full feeds; then pass that path to `build_rag_index.py` / `retrieval_augment_queries.py --corpus`).
+- **Dense RAG (FAISS CPU + embeddings):** `python scripts/build_rag_index.py --corpus data/rag_corpus.json --output_dir outputs/rag_index` then augment with `python scripts/retrieval_augment_queries.py --mode embedding_faiss --index_dir outputs/rag_index --queries data/queries.json --out outputs/queries_rag_faiss.json`. Legacy sparse retrieval remains `--mode tfidf`.
+
+- **MMLU / CTF evaluation JSON:** `python scripts/build_mmlu_subset.py` (100 items, stratified across `cais/mmlu` subjects; requires Hugging Face download) and `python scripts/build_ctf_eval_subset.py` (50 defensive prompts; metadata from [NYU CTF Bench](https://github.com/NYU-LLM-CTF/NYU_CTF_Bench) `test_dataset.json`, **GPL-2.0** — see manifest). These are **not** full CTF agent runs (no Docker solves).
 
 - **If `python` behaves oddly** (Store alias / wrong interpreter), use the same interpreter explicitly, e.g. `py -3 ...` or your conda `python.exe` path, and verify with `where.exe python` / `python -c "import sys; print(sys.executable)"`.
 

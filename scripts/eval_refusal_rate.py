@@ -22,6 +22,7 @@ def main():
     p.add_argument("--tiers", default="data/query_tiers.json")
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--save_markdown", default=None)
+    p.add_argument("--save_json", default=None, help="Optional machine-readable metrics (for automation).")
     p.add_argument(
         "--manual_labels",
         default=None,
@@ -107,6 +108,22 @@ def main():
             )
         out_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
         print(f"\nMarkdown report written to {out_path}")
+
+    if args.save_json:
+        jp = Path(args.save_json)
+        jp.parent.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "n": n,
+            "hard": hard,
+            "soft": soft,
+            "refusals": refusals,
+            "refusal_rate_pct": rate,
+            "bootstrap_ci_low_pct": 100.0 * lo,
+            "bootstrap_ci_high_pct": 100.0 * hi,
+            "tier_stats": tier_stats,
+        }
+        jp.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        print(f"JSON metrics written to {jp}")
 
 
 if __name__ == "__main__":

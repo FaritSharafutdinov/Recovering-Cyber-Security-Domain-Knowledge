@@ -1,0 +1,92 @@
+[
+  {
+    "id": "c1",
+    "title": "Defense in depth",
+    "text": "Defense in depth layers independent controls so that a failure in one layer does not defeat the whole system. Typical layers include identity, network segmentation, endpoint protection, logging, and backup recovery. Each layer should have measurable coverage and owners."
+  },
+  {
+    "id": "c2",
+    "title": "TLS basics",
+    "text": "TLS provides confidentiality and integrity for data in transit between clients and servers. Modern deployments prefer TLS 1.2+ with AEAD ciphersuites, disable legacy protocols, and use certificate transparency and automated renewal to reduce outage and misconfiguration risk."
+  },
+  {
+    "id": "c3",
+    "title": "XSS categories",
+    "text": "Cross-site scripting (XSS) injects attacker-controlled script into pages other users view. Reflected XSS delivers payload via a single request URL; stored XSS persists in a database; DOM XSS arises from unsafe client-side sinks. Mitigations include contextual encoding, strict CSP, and safer DOM APIs."
+  },
+  {
+    "id": "c4",
+    "title": "SQL injection pattern",
+    "text": "SQL injection occurs when untrusted input becomes part of a SQL command. Parameterized queries (prepared statements) separate code from data. ORMs reduce risk but can still be unsafe with string concatenation or raw queries. Principle of least privilege for DB accounts limits blast radius."
+  },
+  {
+    "id": "c5",
+    "title": "RBAC vs ABAC",
+    "text": "Role-based access control (RBAC) grants permissions via stable job roles. Attribute-based access control (ABAC) evaluates dynamic attributes such as device posture, location, and sensitivity labels. ABAC is expressive but harder to audit; RBAC is simpler for many enterprise apps."
+  },
+  {
+    "id": "c6",
+    "title": "Secure logging",
+    "text": "Security logs should capture who did what, when, and on which asset, without storing secrets like passwords or raw session tokens. Protect logs from tampering, ship them to a central SIEM, and define retention aligned with investigations and compliance obligations."
+  },
+  {
+    "id": "c7",
+    "title": "Incident response triage",
+    "text": "Initial triage confirms scope, contains active harm, preserves evidence, and communicates status. Containment choices balance availability against risk. After remediation, conduct a blameless postmortem with concrete follow-up tasks and timelines."
+  },
+  {
+    "id": "c8",
+    "title": "Secrets management",
+    "text": "Secrets belong in a vault or managed secret store with rotation, access policies, and audit trails. Avoid embedding secrets in source control. Short-lived credentials reduce the window of abuse if a workload is compromised."
+  },
+  {
+    "id": "c9",
+    "title": "Supply chain risks",
+    "text": "Software supply chain risks include compromised dependencies, typosquatting packages, and unsigned artifacts. Mitigations include dependency pinning, SBOMs, provenance attestations, code review for third-party updates, and restricted CI/CD permissions."
+  },
+  {
+    "id": "c10",
+    "title": "Zero trust summary",
+    "text": "Zero trust assumes breach and verifies explicitly on every request. It combines strong identity, device health signals, micro-segmentation, and continuous monitoring rather than trusting a network perimeter alone."
+  },
+  {
+    "id": "c11",
+    "title": "CSRF overview",
+    "text": "Cross-site request forgery tricks a browser into performing authenticated actions the user did not intend. Mitigations include anti-CSRF tokens bound to sessions, SameSite cookies, and re-authentication for sensitive operations."
+  },
+  {
+    "id": "c12",
+    "title": "SSRF pattern",
+    "text": "Server-side request forgery makes the server fetch attacker-chosen URLs, potentially reaching internal services. Defenses include URL allowlists, blocking link-local and metadata endpoints, and network egress controls for application tiers."
+  },
+  {
+    "id": "c13",
+    "title": "Password storage",
+    "text": "Passwords should be stored using slow salted password hashing algorithms designed for credentials, not fast general hashes. Enforce MFA for human accounts and prefer phishing-resistant factors for high-risk roles."
+  },
+  {
+    "id": "c14",
+    "title": "API authentication",
+    "text": "APIs commonly use OAuth2/OIDC for delegated access, signed JWTs with short lifetimes, and mTLS for service-to-service trust. Rate limiting and anomaly detection reduce automated abuse."
+  },
+  {
+    "id": "c15",
+    "title": "Patch management",
+    "text": "Effective patch management inventories assets, prioritizes by exploitability and business impact, tests changes, and measures mean time to remediate critical issues. Emergency patching processes handle actively exploited vulnerabilities."
+  },
+  {
+    "id": "c16",
+    "title": "Network segmentation",
+    "text": "Segmentation isolates workloads so lateral movement is harder. East-west inspection, default-deny policies, and jump hosts for administration reduce exposure compared with flat networks."
+  },
+  {
+    "id": "c17",
+    "title": "Threat modeling",
+    "text": "Threat modeling identifies assets, trust boundaries, adversaries, and mitigations early. STRIDE categorizes spoofing, tampering, repudiation, information disclosure, denial of service, and elevation of privilege to guide review."
+  },
+  {
+    "id": "c18",
+    "title": "Secure SDLC",
+    "text": "A secure SDLC integrates security requirements, secure design reviews, static and dynamic testing, dependency scanning, and production monitoring. Shift-left reduces cost but still needs operational feedback loops."
+  }
+]
