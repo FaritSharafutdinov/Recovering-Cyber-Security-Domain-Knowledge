@@ -1,0 +1,29 @@
+[
+  {
+    "name": "r8_default",
+    "lora_r": 8,
+    "lora_alpha": 16,
+    "target_modules": "q_proj,v_proj",
+    "n_train": 5,
+    "max_steps": 20,
+    "seed": 42
+  },
+  {
+    "name": "r16_attn_wide",
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "target_modules": "q_proj,k_proj,v_proj,o_proj",
+    "n_train": 5,
+    "max_steps": 20,
+    "seed": 42
+  },
+  {
+    "name": "r16_more_data",
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "target_modules": "q_proj,v_proj",
+    "n_train": 12,
+    "max_steps": 40,
+    "seed": 42
+  }
+]

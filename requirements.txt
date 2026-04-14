@@ -4,3 +4,7 @@ accelerate
 datasets
 peft
 bitsandbytes
+matplotlib
+faiss-cpu
+sentence-transformers
+ijson

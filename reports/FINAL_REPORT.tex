@@ -1,0 +1,199 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[margin=2.5cm]{geometry}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  columns=fullflexible,
+  keepspaces=true
+}
+
+\title{Final Report: Recovering Cyber-Security Domain Knowledge\\with LoRA, Prompt Engineering, and a RAG Prototype}
+\author{Farit Sharafutdinov, Grigorii Belayev\\Course: Generative AI (Spring 2026)\\Instructor: Bader Rasheed}
+\date{\today}
+
+\begin{document}
+\maketitle
+\noindent Repository: \href{https://github.com/FaritSharafutdinov/Recovering-Cyber-Security-Domain-Knowledge}{Recovering-Cyber-Security-Domain-Knowledge}
+
+\medskip
+\noindent\textbf{Contributions.} Farit Sharafutdinov---dataset, LoRA training pipeline, experiments; Grigorii Belayev---baseline evaluation, inference and evaluation scripts, reporting infrastructure.
+
+\begin{abstract}
+We study \emph{over-refusal} on technically legitimate cyber-security prompts when using an aligned instruction-tuned large language model (Llama-3-8B-Instruct in 4-bit). We formalize an evaluation protocol with hard/soft refusal labels, difficulty tiers, bootstrap confidence intervals, trigger-token sensitivity, and paired comparisons between runs on identical query IDs. We implement parameter-efficient adaptation (LoRA) with a reproducible training script, a prompt-engineering ablation harness, and a lightweight retrieval-augmented generation (RAG) prototype based on TF--IDF over an in-repository corpus. Empirical headline results below use the frozen baseline response file and expert manual labels shipped with the repository (\texttt{data/baseline\_outputs.json}, \texttt{data/baseline\_refusal\_labels.json}), ensuring transparent replication without paid LLM-as-judge APIs.
+\end{abstract}
+
+\section{Objective and research question}
+\textbf{Objective.} Quantify how often a modern aligned chat model refuses or dilutes answers on \emph{defensive} or \emph{educational} security tasks, and build tooling to compare mitigation strategies: (i) prompt engineering via system-role profiles, (ii) non-parametric domain augmentation (RAG), and (iii) LoRA fine-tuning on instruction--response pairs.
+
+\textbf{Core question.} Alignment compresses the model's effective policy: token patterns correlated with offensive tooling can push the model into refusal templates even when the user intent is authorized testing, education, or incident response. We treat this as a \emph{decision-boundary} phenomenon in prompt space rather than purely ``lack of knowledge.''
+
+\section{Model definition and training objective}
+\subsection{Backbone and quantization}
+Baseline generation uses Llama-3-8B-Instruct in 4-bit NF4-style quantization (\texttt{unsloth/llama-3-8b-instruct-bnb-4bit}), loaded through Hugging Face \texttt{transformers} with \texttt{bitsandbytes}, executed with deterministic decoding by default (fixed seed, greedy decoding unless sampling is explicitly enabled).
+
+\subsection{LoRA parameterization}
+For a frozen weight matrix $W_0 \in \mathbb{R}^{d \times k}$, LoRA \cite{hu2021lora} learns
+\[
+W = W_0 + BA,\quad B \in \mathbb{R}^{d \times r},\ A \in \mathbb{R}^{r \times k},\quad r \ll \min(d,k),
+\]
+training only $(A,B)$ while $W_0$ stays fixed. This is a low-dimensional update: parameter count scales as $O(r(d+k))$ instead of $O(dk)$. QLoRA \cite{dettmers2023qlora} combines 4-bit base weights with LoRA adapters in float precision for memory-efficient adaptation; our repository follows the same engineering pattern for the 8B experiments, while the bundled sanity trainer defaults to full-precision TinyLlama for fast pipeline checks.
+
+\subsection{Causal language modeling loss}
+Given token sequence $x_{1:T}$ (instruction and continuation), the training objective is standard causal LM negative log-likelihood:
+\[
+\mathcal{L}_{\mathrm{CLM}} = -\sum_{t=1}^{T} \log p_\theta(x_t \mid x_{<t}).
+\]
+For adaptation datasets built from curated instruction--response pairs, optimization updates only LoRA parameters (plus optional normalization layers depending on configuration).
+
+\subsection{Optimization details (implementation)}
+\texttt{scripts/train.py} exposes LoRA rank $r$, $\alpha$, dropout, target modules (comma-separated attention projections), subset size \texttt{--n\_train}, and training steps. Adapters can be saved to \texttt{<output\_dir>/adapter} for \texttt{scripts/inference.py --lora\_adapter}. Training uses Hugging Face \texttt{Trainer} with \texttt{TrainingArguments} (logging each step for sanity runs, no checkpoint spam by default).
+
+\section{Retrieval augmentation (RAG prototype)}
+We implement an \emph{offline} prototype: TF--IDF vectorization over \texttt{data/rag\_corpus.json}, retrieval of top-$k$ passages per query, and deterministic string injection into the prompt (\texttt{scripts/retrieval\_augment\_queries.py}). This follows the retrieve-then-read pattern \cite{lewis2020rag} but deliberately avoids external vector databases to keep the course project reproducible on a single machine.
+
+\section{Evaluation protocol}
+\subsection{Dataset}
+\texttt{data/queries.json} contains 50 instruction-style prompts spanning exploitation mechanics (in a controlled, educational framing), protocol attacks, defensive hardening, and forensic tasks. The same integer \texttt{id} is reused across runs for paired statistics.
+
+\subsection{Refusal taxonomy and manual protocol}
+Each item receives $y_i \in \{\texttt{hard},\texttt{soft},\texttt{none}\}$:
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{Hard:} explicit denial or policy block template.
+\item \textbf{Soft:} evasive or generic answer missing requested technical substance.
+\item \textbf{None:} substantive answer aligned with the request.
+\end{itemize}
+Manual labels for the baseline file are stored in \texttt{data/baseline\_refusal\_labels.json}; the labeling workflow is documented in \texttt{MANUAL\_EVALUATION\_PROTOCOL.md}. A lightweight lexical classifier provides a fallback when manual labels are absent.
+
+\subsection{Primary metrics and uncertainty}
+Let $r_i = \mathbb{I}[y_i \neq \texttt{none}]$. We report $\hat p = \frac{1}{N}\sum_i r_i$ and a percentile bootstrap confidence interval with $B{=}2000$ resamples \cite{efron1994introduction}. On $N{=}50$, intervals are wide by construction---this is a mathematical feature of binomial sampling with small $N$, not a bug.
+
+\subsection{Difficulty tiers and trigger tokens}
+\texttt{data/query\_tiers.json} assigns each \texttt{id} to a semantic tier (e.g., offense-sensitive vs defense-practical). \texttt{scripts/analyze\_trigger\_tokens.py} estimates conditional refusal rates for curated keywords in \texttt{data/trigger\_tokens.json}. High conditional rates with tiny counts must be read as \emph{diagnostics}, not causal attributions.
+
+\subsection{Paired comparisons}
+\texttt{scripts/eval\_paired\_bootstrap.py} bootstraps the mean difference in binary refusal indicators between two JSON runs with identical IDs, yielding uncertainty on \emph{policy deltas} rather than only marginal rates.
+
+\section{Controlled comparison and ablation (required element)}
+We include multiple controlled comparisons that share identical queries and decoding protocol:
+\begin{enumerate}[leftmargin=1.5em]
+\item \textbf{Tier-stratified analysis:} refusal rates differ strongly by tier (Table~\ref{tab:tiers}); this is an ablation over \emph{semantic stratum} of the benchmark.
+\item \textbf{Prompt-profile ablation:} \texttt{scripts/run\_prompt\_ablation.py} iterates \texttt{data/prompt\_profiles.json} and overrides the system prompt only, holding model weights fixed---a clean intervention isolating prompt-space effects.
+\item \textbf{RAG vs no-RAG (protocol):} augmentation changes the input distribution (context length and lexical cues); inference on augmented JSON isolates non-parametric memory effects from weight updates.
+\item \textbf{LoRA module/rank ablation (tooling):} \texttt{train.py} exposes \texttt{--target\_modules} and \texttt{--lora\_r}; reporting rank--loss curves is supported by the training logs.
+\end{enumerate}
+
+\section{Results (replicated from repository artifacts)}
+All numbers in Table~\ref{tab:core} and Table~\ref{tab:tiers} are obtained by running \texttt{eval\_refusal\_rate.py} on \texttt{data/baseline\_outputs.json} with \texttt{data/baseline\_refusal\_labels.json} (and tier file), i.e., they are tied to the checked-in baseline run used across the project.
+
+\begin{table}[h]
+\centering
+\caption{Baseline refusal summary ($N{=}50$, manual labels).}
+\label{tab:core}
+\begin{tabular}{lr}
+\toprule
+Metric & Value \\
+\midrule
+Hard refusals & 7 \\
+Soft refusals & 7 \\
+Total refusal rate & 28.0\% \\
+95\% bootstrap CI & [16.0\%, 42.0\%] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Refusal rate by difficulty tier (manual labels).}
+\label{tab:tiers}
+\begin{tabular}{lrrrrr}
+\toprule
+Tier & $N$ & Refusals & Hard & Soft & Rate \\
+\midrule
+\texttt{advanced\_exploitation} & 11 & 4 & 1 & 3 & 36.4\% \\
+\texttt{offense\_sensitive} & 22 & 9 & 6 & 3 & 40.9\% \\
+\texttt{defense\_practical} & 10 & 1 & 0 & 1 & 10.0\% \\
+\texttt{technical\_explanation} & 7 & 0 & 0 & 0 & 0.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Trigger-token diagnostics (top rows)}
+High conditional rates appear for terms such as \texttt{payload}, \texttt{shellcode}, and \texttt{bypass}; however, several rows have $n{=}1$--$2$ matching queries. The correct statistical reading is: \emph{the benchmark is too small for stable per-token frequency estimation}; the table still supports the qualitative claim that lexical correlates of offensive tooling co-occur with refusals.
+
+\subsection{Interpretation linked to optimization geometry}
+Low-rank updates act in weight space as structured perturbations of logits; they cannot arbitrarily relabel all token contexts without incurring large CLM loss on retained pretraining behaviors. Therefore LoRA is well-suited to \emph{local} boundary adjustments (e.g., SOC/defensive contexts) but is not a guarantee of global safety--utility tradeoff resolution---especially under distribution shift in security language \cite{ouyang2022training}.
+
+\section{Failure analysis (evidence beyond a single scalar)}
+Examples called out in internal review (IDs 3, 10, 19 in the baseline sheet) show refusals on format-string education, time-based SQLi analysis, and JWT \texttt{alg=None} defensive explanations. These failures are informative: the model often collapses to policy text instead of conditional technical guidance (authorized lab, defensive purpose, or threat-modeling framing).
+
+\section{Reproducibility and what we verify in code}
+\texttt{README.md} and \texttt{STRUCTURE.md} document installation (\texttt{pip install -r requirements.txt}) and command lines. Windows-specific pitfalls are documented: \texttt{outputs/} is gitignored but exists on disk; PowerShell globs may not expand for Python; \texttt{run\_prompt\_ablation.py} must forward GPU flags via \texttt{--infer\_extra}.
+
+For machines where full 50-query GPU sweeps are costly, \texttt{scripts/run\_offline\_demo.py} regenerates metrics, tables, and a comparison plot from in-repo JSON without downloading weights, proving the evaluation stack end-to-end. Short CUDA smoke tests use \texttt{scripts/inference.py --max\_queries 1} with reduced \texttt{--max\_new\_tokens}.
+
+\section{Limitations and defense talking points}
+\begin{itemize}[leftmargin=1.5em]
+\item $N{=}50$ implies wide CIs; claims should emphasize \emph{directional} patterns (tier and trigger diagnostics) and protocol correctness.
+\item Manual labels cost time but avoid paid judges; inter-annotator agreement is not reported in this repository version---a natural examiner question with an honest answer.
+\item TF--IDF RAG is a prototype: retrieval noise can either help (missing facts) or hurt (injecting adversarial adjacent text).
+\item LoRA defaults in \texttt{train.py} target TinyLlama for fast sanity checks; adapting Llama-3-8B with the same JSON format is an engineering extension (4-bit load, chat template, adapter compatibility), not a one-line toggle.
+\end{itemize}
+
+\section{Conclusion}
+We deliver a reproducible research harness around refusal behavior on cyber-security prompts: formal metrics with uncertainty, tier and trigger analyses, paired comparison tooling, RAG augmentation, and LoRA training/inference integration. Baseline evidence on the curated 50-prompt suite shows a 28\% refusal rate with concentration in offense-sensitive tiers, consistent with an alignment-induced conservative boundary. The next empirical step---already scaffolded in code---is to populate \texttt{outputs/} with full GPU runs (prompt ablation matrix, RAG run, LoRA adapters on the same backbone) and to compare paired deltas with bootstrap CIs.
+
+\begin{thebibliography}{99}
+\bibitem{hu2021lora}
+E.~J. Hu, Y.~Shen, P.~Wallis, Z.~Allen-Zhu, Y.~Li, S.~Wang, L.~Wang, W.~Chen,
+``LoRA: Low-Rank Adaptation of Large Language Models,'' \emph{arXiv:2106.09685}, 2021.
+
+\bibitem{dettmers2023qlora}
+T.~Dettmers, A.~Pagnoni, A.~Holtzman, and L.~Zettlemoyer,
+``QLoRA: Efficient Finetuning of Quantized LLMs,'' \emph{arXiv:2305.14314}, 2023.
+
+\bibitem{touvron2023llama}
+H.~Touvron et al.,
+``Llama 2: Open Foundation and Fine-Tuned Chat Models,'' \emph{arXiv:2307.09288}, 2023.
+
+\bibitem{lewis2020rag}
+P.~Lewis, E.~Perez, A.~Piktus, et al.,
+``Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks,'' \emph{NeurIPS}, 2020.
+
+\bibitem{efron1994introduction}
+B.~Efron and R.~J. Tibshirani,
+\emph{An Introduction to the Bootstrap}, Chapman \& Hall, 1994.
+
+\bibitem{ouyang2022training}
+L.~Ouyang, J.~Wu, X.~Jiang, et al.,
+``Training language models to follow instructions with human feedback,'' \emph{NeurIPS}, 2022.
+
+\bibitem{meta2024llama3}
+Meta AI,
+``The Llama 3 Herd of Models,'' \emph{arXiv:2407.21783}, 2024.
+\end{thebibliography}
+
+\appendix
+\section{Minimal command cheatsheet}
+\begin{lstlisting}
+pip install -r requirements.txt
+python scripts/run_offline_demo.py
+python scripts/eval_refusal_rate.py --input data/baseline_outputs.json \
+  --manual_labels data/baseline_refusal_labels.json \
+  --save_markdown outputs/baseline_eval.md
+python scripts/inference.py --model_id unsloth/llama-3-8b-instruct-bnb-4bit \
+  --load_in_4bit --device cuda --queries data/queries.json \
+  --out outputs/run.json --save_run_config
+\end{lstlisting}
+
+\end{document}
