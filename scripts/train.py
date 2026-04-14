@@ -1,20 +1,24 @@
 """
-Sanity check: overfit on a tiny subset and show learning curve.
-Run from repo root: python scripts/train.py
+LoRA sanity check and small ablation harness (rank, target modules, training subset size).
+
+Examples:
+  python scripts/train.py
+  python scripts/train.py --lora_r 16 --target_modules q_proj,k_proj,v_proj,o_proj --n_train 8 --max_steps 30
+  python scripts/train.py --lora_r 64 --n_train 20 --output_dir outputs/lora_rank64_n20
 """
+import argparse
 import json
-import torch
+import sys
 from pathlib import Path
 
-from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments, Trainer
-from peft import LoraConfig, get_peft_model, TaskType
+import torch
 from datasets import Dataset
+from peft import LoraConfig, get_peft_model, TaskType
+from transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments
 
-OUTPUT_DIR = Path("outputs/sanity_check_output")
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-def load_tiny_subset(data_path: str = "data/baseline_outputs.json", n: int = 5):
-    with open(data_path) as f:
+def load_subset(data_path: str, n: int):
+    with open(data_path, encoding="utf-8") as f:
         data = json.load(f)
     subset = data[:n]
     texts = []
@@ -24,13 +28,35 @@ def load_tiny_subset(data_path: str = "data/baseline_outputs.json", n: int = 5):
         texts.append(f"Instruction: {inst}\nResponse: {resp}")
     return Dataset.from_dict({"text": texts})
 
-def main():
-    train_data = load_tiny_subset(n=5)
 
-    model_name = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--data_path", default="data/baseline_outputs.json")
+    p.add_argument("--n_train", type=int, default=5, help="Number of instruction-response pairs from the start of the file.")
+    p.add_argument("--model_name", default="TinyLlama/TinyLlama-1.1B-Chat-v1.0")
+    p.add_argument("--lora_r", type=int, default=8)
+    p.add_argument("--lora_alpha", type=int, default=16)
+    p.add_argument(
+        "--target_modules",
+        default="q_proj,v_proj",
+        help="Comma-separated module names for LoRA (e.g. q_proj,v_proj or q_proj,k_proj,v_proj,o_proj).",
+    )
+    p.add_argument("--lora_dropout", type=float, default=0.05)
+    p.add_argument("--max_steps", type=int, default=20)
+    p.add_argument("--max_length", type=int, default=256)
+    p.add_argument("--per_device_train_batch_size", type=int, default=1)
+    p.add_argument("--output_dir", default="outputs/sanity_check_output")
+    p.add_argument("--seed", type=int, default=42)
+    args = p.parse_args()
+
+    out_dir = Path(args.output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    train_data = load_subset(args.data_path, args.n_train)
+
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name)
     model = AutoModelForCausalLM.from_pretrained(
-        model_name,
+        args.model_name,
         torch_dtype=torch.float32,
         device_map="auto" if torch.cuda.is_available() else None,
     )
@@ -39,7 +65,7 @@ def main():
         return tokenizer(
             examples["text"],
             truncation=True,
-            max_length=256,
+            max_length=args.max_length,
             padding="max_length",
         )
 
@@ -52,33 +78,63 @@ def main():
         labels = examples["input_ids"].clone()
         labels[examples["attention_mask"] == 0] = -100
         return {"labels": labels}
+
     train_data = train_data.map(add_labels, batched=True)
 
+    target_list = [s.strip() for s in args.target_modules.split(",") if s.strip()]
     lora = LoraConfig(
-        r=8,
-        lora_alpha=16,
-        target_modules=["q_proj", "v_proj"],
-        lora_dropout=0.05,
+        r=args.lora_r,
+        lora_alpha=args.lora_alpha,
+        target_modules=target_list,
+        lora_dropout=args.lora_dropout,
         task_type=TaskType.CAUSAL_LM,
     )
     model = get_peft_model(model, lora)
 
-    args = TrainingArguments(
-        output_dir=str(OUTPUT_DIR),
-        max_steps=20,
-        per_device_train_batch_size=1,
+    targs = TrainingArguments(
+        output_dir=str(out_dir),
+        max_steps=args.max_steps,
+        per_device_train_batch_size=args.per_device_train_batch_size,
         logging_steps=1,
         save_strategy="no",
         report_to="none",
-        seed=42,
+        seed=args.seed,
     )
-    trainer = Trainer(
-        model=model,
-        args=args,
-        train_dataset=train_data,
-    )
+    trainer = Trainer(model=model, args=targs, train_dataset=train_data)
     trainer.train()
-    print("\nSanity check done. Learning curve above shows loss decreasing (expected).")
+
+    versions = {"python": sys.version.split()[0], "torch": torch.__version__}
+    try:
+        import transformers
+
+        versions["transformers"] = transformers.__version__
+    except Exception:
+        pass
+    try:
+        import peft
+
+        versions["peft"] = peft.__version__
+    except Exception:
+        pass
+
+    meta = {
+        "model_name": args.model_name,
+        "data_path": args.data_path,
+        "n_train": args.n_train,
+        "lora_r": args.lora_r,
+        "lora_alpha": args.lora_alpha,
+        "lora_dropout": args.lora_dropout,
+        "target_modules": target_list,
+        "max_steps": args.max_steps,
+        "max_length": args.max_length,
+        "per_device_train_batch_size": args.per_device_train_batch_size,
+        "seed": args.seed,
+        "versions": versions,
+    }
+    (out_dir / "run_config.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
+    print("\nTraining finished.")
+    print(f"Config written to {out_dir / 'run_config.json'}")
+
 
 if __name__ == "__main__":
     main()

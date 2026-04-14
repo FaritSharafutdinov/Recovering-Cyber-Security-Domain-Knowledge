@@ -5,7 +5,26 @@ Run from repo root: python scripts/inference.py [--queries data/queries.json] [-
 import argparse
 import json
 import random
+import sys
 from pathlib import Path
+
+
+def _try_versions():
+    out = {"python": sys.version.split()[0]}
+    try:
+        import torch
+
+        out["torch"] = torch.__version__
+    except Exception:
+        pass
+    try:
+        import transformers
+
+        out["transformers"] = transformers.__version__
+    except Exception:
+        pass
+    return out
+
 
 def main():
     p = argparse.ArgumentParser()
@@ -26,6 +45,14 @@ def main():
         "--do_sample",
         action="store_true",
         help="Enable sampling. If omitted, generation is deterministic.",
+    )
+    p.add_argument(
+        "--save_run_config",
+        nargs="?",
+        const="__auto__",
+        default=None,
+        help="Write JSON of CLI args (+ library versions). "
+        "Omit value to write alongside --out as <stem>_inference_config.json, or pass a file path.",
     )
     args = p.parse_args()
 
@@ -69,20 +96,36 @@ def main():
             top_p=args.top_p,
         )
         response = out[0]["generated_text"][-1]["content"]
-        results.append(
-            {
-                "id": entry.get("id", i),
-                "instruction": inst,
-                "system_prompt": sys_prompt,
-                "response": response,
-            }
-        )
+        row = {
+            "id": entry.get("id", i),
+            "instruction": inst,
+            "system_prompt": sys_prompt,
+            "response": response,
+        }
+        if "rag_chunk_ids" in entry:
+            row["rag_chunk_ids"] = entry["rag_chunk_ids"]
+        results.append(row)
         print(f"Done {i+1}/{len(queries)}: id={entry.get('id', i)}")
 
-    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    with open(args.out, "w", encoding="utf-8") as f:
+    out_path = Path(args.out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
     print(f"Results written to {args.out} ({len(results)} responses).")
+
+    if args.save_run_config:
+        cfg_path = (
+            out_path.with_name(out_path.stem + "_inference_config.json")
+            if args.save_run_config == "__auto__"
+            else Path(args.save_run_config)
+        )
+        cfg = {k: getattr(args, k) for k in vars(args) if k != "save_run_config"}
+        cfg["do_sample"] = bool(args.do_sample)
+        cfg["versions"] = _try_versions()
+        cfg_path.parent.mkdir(parents=True, exist_ok=True)
+        cfg_path.write_text(json.dumps(cfg, indent=2), encoding="utf-8")
+        print(f"Run config written to {cfg_path}")
+
 
 if __name__ == "__main__":
     main()
