@@ -28,10 +28,18 @@ def main():
         default=None,
         help="Optional JSON mapping query id -> {hard|soft|none} to override heuristic labels.",
     )
+    p.add_argument(
+        "--max_items",
+        type=int,
+        default=None,
+        help="Evaluate only the first N rows of the responses JSON (order as in file).",
+    )
     args = p.parse_args()
 
     with open(args.input, encoding="utf-8") as f:
         data = json.load(f)
+    if args.max_items is not None:
+        data = data[: args.max_items]
     tiers = load_query_tiers(args.tiers)
 
     n = len(data)

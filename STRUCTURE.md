@@ -17,8 +17,8 @@
 
 | Script | Role |
 |--------|------|
-| `inference.py` | Llama-3-8B-Instruct 4-bit generation; optional `--save_run_config`. |
-| `train.py` | TinyLlama LoRA sanity + rank/module/dataset-size knobs; writes `run_config.json`. |
+| `inference.py` | HF causal LM via `--model_id` (defaults to TinyLlama in code); optional `--load_in_4bit`, `--lora_adapter`, `--save_run_config`, deterministic decoding by default. |
+| `train.py` | LoRA trainer: rank / target modules / `n_train` / steps; optional `--load_in_4bit` (QLoRA-style) for the same HF model as inference; `--save_adapter` for `inference.py`. Default backbone remains TinyLlama for fast CPU sanity. |
 | `eval_refusal_rate.py` | Refusal counts, bootstrap CI, tier table, Markdown export. |
 | `eval_paired_bootstrap.py` | Paired bootstrap on refusal deltas (baseline vs candidate JSON). |
 | `compare_refusal_reports.py` | Multi-file refusal ranking; Markdown + JSON. Supports `--input_dir` (PowerShell-friendly; avoids broken `*.json` glob expansion). |
@@ -31,12 +31,14 @@
 | `build_mmlu_subset.py` | Stratified MMLU subset (`data/mmlu_eval_100.json`) via Hugging Face `cais/mmlu`. |
 | `build_ctf_eval_subset.py` | NYU CTF Bench–derived defensive prompts + manifest (metadata from public `test_dataset.json`, GPL-2.0). |
 | `run_experiment_suite.py` | **Master pipeline:** optional FAISS index, MMLU/CTF dataset builders, retrieval (tfidf + faiss), inference, eval, manifest + [EXPERIMENTS.md](EXPERIMENTS.md). Use `--preset full` for all modes; `--skip_inference` for dry runs. |
-| `smoke_test.py` | Fast CI-style checks (imports, offline demo, tiny RAG index, NVD/CTF scripts, no full LLM inference). |
+| `run_full_report_pipeline.py` | **GPU report driver:** `run_experiment_suite` (full + prompt ablation) + compare/plot + trigger tokens + LoRA sweep from [configs/report_full_sweep.json](configs/report_full_sweep.json) + MMLU/RAG inference with primary adapter + [outputs/full_report/REPORT.md](outputs/full_report/REPORT.md). |
+| `smoke_test.py` | Fast CI-style checks (imports, offline demo, tiny RAG index, NVD/CTF scripts, paired bootstrap smoke, `py_compile` on probe drivers; no full LLM inference). |
+| `llama8b_rag_faiss_probe.py` | Minimal GPU probe: fixed-size query slice, baseline inference + FAISS augment + inference + refusal metrics + heuristic paired JSON (see script docstring). |
 | `hf_dataset_to_queries.py` | Sample HF dataset → `queries.json` format. |
 | `mcq_to_queries.py` / `eval_mcq_probe.py` | General MCQ probe pipeline. |
 | `eval_response_taxonomy.py` | Automated failure-shape / usefulness proxy table. |
 | `render_train_sweep.py` | Print bash lines from `configs/*.json` job list (no training). |
-| `llm_judge.py` | Judge API contract + stub backend (wire real LLM later). |
+| `llm_judge.py` | Optional judge API contract + stub backend (implement your provider client here). |
 
 ## `scripts/lib/` index
 
@@ -53,4 +55,5 @@
 | File | Role |
 |------|------|
 | `train_sweep.example.json` | Example jobs for `render_train_sweep.py`. |
+| `report_full_sweep.json` | LoRA jobs for `run_full_report_pipeline.py` (rank / modules / dataset size). |
 | `seeds.example.json` | Example seed list for reproducibility planning. |

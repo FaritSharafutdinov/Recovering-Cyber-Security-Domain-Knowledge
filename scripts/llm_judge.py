@@ -7,7 +7,7 @@ Intended categories (align with roadmap / report):
   - hallucination_risk: low | medium | high | unknown
   - unsafe_detail_risk: low | medium | high | unknown
 
-Implement ``run_judge_batch`` with your provider (OpenAI, Anthropic, local vLLM, etc.).
+Implement ``run_judge_batch`` with your provider (HTTPS API, local HTTP server, etc.).
 """
 from __future__ import annotations
 

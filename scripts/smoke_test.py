@@ -3,7 +3,8 @@ Fast health checks for the repo (no full LLM inference).
 
 Runs lightweight subprocess steps: imports, offline demo, tiny RAG index,
 TF-IDF + FAISS augment on 2 queries, NVD converter on a minimal feed, CTF builder (small),
-eval scripts, compare/plot, optional experiment suite dry path.
+eval scripts, compare/plot, experiment suite dry path, paired bootstrap smoke,
+and ``py_compile`` on probe/pipeline drivers (no full LLM inference).
 
 Usage (from repo root):
   python scripts/smoke_test.py
@@ -252,6 +253,36 @@ def main() -> int:
             str(smoke / "experiment_manifest.json"),
             "--experiments_md",
             str(smoke / "EXPERIMENTS_SMOKE.md"),
+        ]
+    )
+
+    # 12) Paired bootstrap (response-based labels; no GPU)
+    run(
+        [
+            PY,
+            str(REPO_ROOT / "scripts" / "eval_paired_bootstrap.py"),
+            "--baseline",
+            str(od / "baseline_copy.json"),
+            "--candidate",
+            str(od / "candidate_masked.json"),
+            "--manual_scope",
+            "none",
+            "--seed",
+            "42",
+            "--save_json",
+            str(smoke / "paired_smoke.json"),
+        ]
+    )
+
+    # 13) Syntax-check orchestration / probe scripts (no execution of GPU probe)
+    run(
+        [
+            PY,
+            "-m",
+            "py_compile",
+            str(REPO_ROOT / "scripts" / "llama8b_rag_faiss_probe.py"),
+            str(REPO_ROOT / "scripts" / "run_full_report_pipeline.py"),
+            str(REPO_ROOT / "scripts" / "eval_paired_bootstrap.py"),
         ]
     )
 

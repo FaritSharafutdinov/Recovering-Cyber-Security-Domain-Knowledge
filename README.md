@@ -1,15 +1,17 @@
 # Recovering-Cyber-Security-Domain-Knowledge
 
-Project: Recovering Cyber-Security Domain Knowledge via LoRA Fine-Tuning.
+Project: measuring and mitigating **over-refusal** on cyber-security instruction prompts (RAG, prompt profiles, LoRA/QLoRA), with a reproducible evaluation stack. The repo does **not** yet claim publication-grade “knowledge recovery”; it ships **pipelines + uncertainty-aware metrics** on a fixed small benchmark.
 
 **Layout reference:** [STRUCTURE.md](STRUCTURE.md) (directories, `scripts/` index, `scripts/lib/`).
+
+**CI / quick check:** `python scripts/smoke_test.py` (no full LLM run; ~1–2 minutes with sentence-transformers cache).
 
 ## Repository layout
 
 - **scripts/** — CLIs (see [STRUCTURE.md](STRUCTURE.md)); shared code in **`scripts/lib/`** (`refusal`, `bootstrap`, `tiers`, `responses`).
 - **configs/** — JSON manifests for LoRA/command sweeps (`train_sweep.example.json`, `seeds.example.json`).
 - **data/** — `queries.json`, `baseline_outputs.json`, … **`rag_corpus.json`** is built from **NIST NVD** CVE JSON feeds (`nvdcve-2.0-*.json`) via `scripts/nvdcve_to_rag_corpus.py` (English description + CVE id + published date; heavy fields like configurations/CVSS JSON are dropped). Short **tutorial** snippets live in `data/rag_corpus_education.json` and are prepended when using `--merge-education`. For a **full** multi-year corpus use `--format jsonl` and point `--corpus` at that file. **Other generated files:** `mmlu_eval_100.json`, `ctf_eval_50.json` + manifest (see respective builders).
-- **notebooks/** — `baseline_testing.ipynb` (if run from repo root, use paths like \texttt{data/queries.json})
+- **notebooks/** — `baseline_testing.ipynb` (if run from repo root, use paths like `data/queries.json`)
 - **reports/** — baseline report (PDF + LaTeX). To rebuild PDF: `pdflatex reports/baseline_report.tex`
 
 ## Contributions
@@ -20,7 +22,7 @@ Project: Recovering Cyber-Security Domain Knowledge via LoRA Fine-Tuning.
 ## Dataset pipeline
 
 - **data/queries.json**: 50 instruction-style prompts (cyber-security and sysadmin). Fields: `id`, `instruction`, `system` (optional).
-- **data/baseline_outputs.json**: baseline model responses for the same queries (`id`, `instruction`, `response`). Produced by running inference on Llama-3-8B-Instruct.
+- **data/baseline_outputs.json**: baseline model responses for the same queries (`id`, `instruction`, `response`). Regenerate with `inference.py` (shipped file may be TinyLlama or another `--model_id`).
 - Preprocessing: no extra download step; data is in-repo. For full LoRA training we will use instruction–response pairs (e.g. from Cyber-Security-Instruct or from baseline_outputs as seed).
 
 ## How to run
@@ -29,6 +31,8 @@ From the **repository root**:
 
 ### Windows / RTX troubleshooting (read this first)
 
+- **PyTorch + CUDA (Python 3.14):** PyPI’s default `torch` wheel is often **CPU-only**. If `python -c "import torch; print(torch.cuda.is_available())"` prints `False` but `nvidia-smi` works, install the CUDA build, then verify again:
+  - `powershell -ExecutionPolicy Bypass -File scripts/install_torch_cuda_win.ps1` (uses nightly **cu128** wheels matching current RTX drivers).
 - **`outputs/` is gitignored** (see `.gitignore`). New files **still appear on disk**, but many IDEs hide ignored folders from the file tree. Check with Explorer or: `Get-ChildItem outputs -Recurse` (PowerShell) / `dir outputs /s` (cmd).
 - **PowerShell glob pitfall**: `outputs/prompt_ablation/*.json` is **not always expanded** before Python sees it. Prefer:
   - `python scripts/compare_refusal_reports.py --input_dir outputs/prompt_ablation --out ... --out_json ...`
@@ -43,6 +47,8 @@ python scripts/run_prompt_ablation.py --infer_extra "--model_id unsloth/llama-3-
 ```powershell
 python scripts/run_experiment_suite.py --preset full --infer_extra "--model_id unsloth/llama-3-8b-instruct-bnb-4bit --load_in_4bit --device cuda"
 ```
+
+- **Full thesis/report pipeline (GPU, one command):** `python scripts/run_full_report_pipeline.py --infer_extra "..."` runs the suite above **with** prompt ablation, compares prompt profiles, plots refusal bars, runs trigger-token analysis, optionally executes the LoRA sweep in [configs/report_full_sweep.json](configs/report_full_sweep.json) (many hours on a single GPU), evaluates refusals per adapter, scores MMLU with the primary adapter, runs RAG-FAISS with that adapter, and writes **`outputs/full_report/REPORT.md`**. Requires CUDA; does **not** modify `data/rag_corpus.json` (read-only). **Recommended without overnight training:** pass **`--skip_lora_sweep`** to run benchmarks + analysis only; train later with `train.py --load_in_4bit` when needed (see script docstrings).
 
 - **Quick health check (no LLM inference):** `python scripts/smoke_test.py` — artifacts under `outputs/smoke_ci/`.
 
@@ -82,7 +88,7 @@ Dry run (index + datasets + augment, **skip** inference): add `--skip_inference`
   - Export a labeling sheet: `python scripts/export_manual_eval_sheet.py --queries data/queries.json --responses <RUN.json> --out outputs/manual_eval/sheet.json`
 - **Paired refusal delta + CI**: `python scripts/eval_paired_bootstrap.py --baseline data/baseline_outputs.json --candidate outputs/candidate.json --manual_labels data/baseline_refusal_labels.json` — bootstrap on per-id refusal differences.
 - **Train sweep plan (no GPU)**: `python scripts/render_train_sweep.py --matrix configs/train_sweep.example.json` — prints `train.py` command lines from a JSON job list.
-- **LLM judge stub (optional / not required for grading)**: `python scripts/llm_judge.py ...` — placeholder only; prefer `MANUAL_EVALUATION_PROTOCOL.md` if you have no API budget.
+- **Optional judge API stub (not required for grading)**: `python scripts/llm_judge.py ...` — placeholder only; prefer `MANUAL_EVALUATION_PROTOCOL.md` for human scoring.
 - **Refusal + tier evaluation**: `python scripts/eval_refusal_rate.py` — reads a responses JSON and prints:
   - total / hard / soft refusals;
   - refusal rate with 95% bootstrap CI;
@@ -116,7 +122,7 @@ Dry run (index + datasets + augment, **skip** inference): add `--skip_inference`
 13. **Evidence plots**: bar chart helper driven by evaluation JSON.
 14. **Shared library layout**: refusal + bootstrap + tiers under `scripts/lib/` for consistent imports from any CLI.
 15. **Paired bootstrap** for A/B refusal comparisons; **inference/train config snapshots** for reproducibility hardening.
-16. **Sweep manifests** in `configs/` + `render_train_sweep.py`; **LLM judge** module with stub backend.
+16. **Sweep manifests** in `configs/` + `render_train_sweep.py`; optional **judge API** stub (`llm_judge.py`).
 
 ## Proposal extensions vs repository (for grading / report alignment)
 
@@ -131,12 +137,12 @@ This maps the numbered research extensions from the project proposal (e.g. repor
 | 5 | LoRA layer / module ablation | partial | `train.py --target_modules …`; full matrix of runs is an experiment schedule, not a single command. |
 | 6 | LoRA rank ablation | partial | `train.py --lora_r …`; same note as row 5. |
 | 7 | Trigger-token analysis | done | `analyze_trigger_tokens.py`, `trigger_tokens.json` |
-| 8 | LLM-as-judge evaluation | partial | Manual protocol (`MANUAL_EVALUATION_PROTOCOL.md`) + heuristics + `eval_response_taxonomy.py`; `llm_judge.py` stub only until API-backed judge is wired. |
+| 8 | External judge evaluation | partial | Manual protocol (`MANUAL_EVALUATION_PROTOCOL.md`) + heuristics + `eval_response_taxonomy.py`; `llm_judge.py` is a stub until a real judge backend is wired. |
 | 9 | Standard / larger benchmark | done | **`queries.json` (50)** kept for controlled cyber comparison; **additions:** `build_mmlu_subset.py`, `build_ctf_eval_subset.py` (`data/ctf_eval_50.json` + manifest), `hf_dataset_to_queries.py` for open-ended HF sampling. Orchestrated by `run_experiment_suite.py`. |
 | 10 | Difficulty tier analysis | done | `query_tiers.json`, `eval_refusal_rate.py` tier table |
 | 11 | Statistical significance | done | Bootstrap CI in `eval_refusal_rate.py`; paired deltas in `eval_paired_bootstrap.py` |
 | 12 | Reproducibility protocol | done | Seeds, deterministic decoding default, `smoke_test.py`, `run_experiment_suite.py`, `EXPERIMENTS.md` / `outputs/experiment_manifest.json`, documented CLI |
-| 13 | Error / response taxonomy | partial | Hard/soft + `eval_response_taxonomy.py`; deep hallucination / safety judging still needs expert or paid LLM judge |
+| 13 | Error / response taxonomy | partial | Hard/soft + `eval_response_taxonomy.py`; deeper safety judging still needs expert review or a paid judge service |
 
 Install: `pip install -r requirements.txt`
 

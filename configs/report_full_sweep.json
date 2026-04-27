@@ -1,0 +1,74 @@
+[
+  {
+    "name": "lora_rank_r8",
+    "lora_r": 8,
+    "lora_alpha": 16,
+    "target_modules": "q_proj,v_proj",
+    "n_train": 20,
+    "max_steps": 50,
+    "seed": 42
+  },
+  {
+    "name": "lora_rank_r16",
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "target_modules": "q_proj,v_proj",
+    "n_train": 20,
+    "max_steps": 50,
+    "seed": 42
+  },
+  {
+    "name": "lora_rank_r32",
+    "lora_r": 32,
+    "lora_alpha": 64,
+    "target_modules": "q_proj,v_proj",
+    "n_train": 20,
+    "max_steps": 50,
+    "seed": 42
+  },
+  {
+    "name": "lora_modules_attn_only",
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "target_modules": "q_proj,v_proj",
+    "n_train": 20,
+    "max_steps": 50,
+    "seed": 42
+  },
+  {
+    "name": "lora_modules_attn_mlp",
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "target_modules": "q_proj,k_proj,v_proj,o_proj",
+    "n_train": 20,
+    "max_steps": 50,
+    "seed": 42
+  },
+  {
+    "name": "lora_data_n10",
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "target_modules": "q_proj,v_proj",
+    "n_train": 10,
+    "max_steps": 40,
+    "seed": 42
+  },
+  {
+    "name": "lora_data_n30",
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "target_modules": "q_proj,v_proj",
+    "n_train": 30,
+    "max_steps": 80,
+    "seed": 42
+  },
+  {
+    "name": "lora_data_n50",
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "target_modules": "q_proj,v_proj",
+    "n_train": 50,
+    "max_steps": 120,
+    "seed": 42
+  }
+]

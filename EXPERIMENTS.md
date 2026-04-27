@@ -1,19 +1,25 @@
 # Experiment log (auto-generated)
 
-The table is **regenerated** on each `run_experiment_suite.py` run. Machine-readable log: `outputs/experiment_manifest.json`.
-
-**Full GPU pipeline (index + default modes + inference + eval):**
-
-```powershell
-python scripts/run_experiment_suite.py --build_rag_index --infer_extra "--model_id unsloth/llama-3-8b-instruct-bnb-4bit --load_in_4bit --device cuda"
-```
-
-**Dry run (index + augment only, no inference):** `--skip_inference`
-
-**Pre-build MMLU/CTF JSON without enabling those inference modes:** `--ensure_all_datasets`
-
-See [README.md](README.md) for details.
+Regenerate with `python scripts/run_experiment_suite.py` (see README).
 
 | UTC timestamp | Host | GPU | Commit | Run name | Command | Output JSON | Refusal % | 95% CI | paired Δ pp | MMLU acc % |
 |---|---|---|---|---|---|---|---:|---|---:|---:|
-| 2026-04-14T20:47:52.040133+00:00 | IMMATER |  | `1ee4abb9` | retrieval_augment_faiss | `C:\Users\Ivenho\miniconda3\python.exe C:\Users\Ivenho\Recovering-Cyber-Security-Domain-Knowledge\scripts\retrieval_augme` | `outputs\exp_smoke\queries_rag_faiss.json` |  |  |  |  |
+| 2026-04-14T22:44:36.395378+00:00 | GREG |  | `` | build_rag_index | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `` |  |  |  |  |
+| 2026-04-14T22:44:36.395427+00:00 | GREG |  | `` | ensure_mmlu_eval_100 | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe scripts/build_mmlu_subset.py` | `C:\Users\andro\Recovering-Cyber-Security-Domain-Knowledge\data\mmlu_eval_100.json` |  |  |  |  |
+| 2026-04-14T22:44:36.395453+00:00 | GREG |  | `` | ensure_ctf_eval_50 | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe scripts/build_ctf_eval_subset.py` | `C:\Users\andro\Recovering-Cyber-Security-Domain-Knowledge\data\ctf_eval_50.json` |  |  |  |  |
+| 2026-04-14T22:44:36.445493+00:00 | GREG |  | `` | mcq_to_queries_mmlu | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\mmlu_queries_for_inference.json` |  |  |  |  |
+| 2026-04-14T22:44:38.434550+00:00 | GREG |  | `` | retrieval_augment_tfidf | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\queries_rag_tfidf.json` |  |  |  |  |
+| 2026-04-14T22:44:48.160682+00:00 | GREG |  | `` | retrieval_augment_faiss | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\queries_rag_faiss.json` |  |  |  |  |
+| 2026-04-14T22:50:07.689327+00:00 | GREG |  | `` | inference_baseline_queries | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\responses_queries_baseline.json` |  |  |  |  |
+| 2026-04-14T22:56:01.916037+00:00 | GREG |  | `` | inference_rag_tfidf | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\responses_rag_tfidf.json` |  |  |  |  |
+| 2026-04-14T23:02:14.490933+00:00 | GREG |  | `` | inference_rag_faiss | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\responses_rag_faiss.json` |  |  |  |  |
+| 2026-04-14T23:04:59.504158+00:00 | GREG |  | `` | inference_mmlu | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\responses_mmlu.json` |  |  |  |  |
+| 2026-04-14T23:11:11.872652+00:00 | GREG |  | `` | inference_ctf | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\responses_ctf.json` |  |  |  |  |
+| 2026-04-14T23:11:11.959842+00:00 | GREG |  | `` | eval_refusal_baseline | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\responses_queries_baseline.json` | 28.0 |  |  |  |
+| 2026-04-14T23:11:12.016813+00:00 | GREG |  | `` | analyze_trigger_baseline | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\responses_queries_baseline.json` |  |  |  |  |
+| 2026-04-14T23:11:12.105328+00:00 | GREG |  | `` | eval_refusal_rag_tfidf | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\responses_rag_tfidf.json` | 28.0 |  |  |  |
+| 2026-04-14T23:11:12.185009+00:00 | GREG |  | `` | eval_refusal_rag_faiss | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\responses_rag_faiss.json` | 28.0 |  |  |  |
+| 2026-04-14T23:11:12.261771+00:00 | GREG |  | `` | eval_paired_baseline_vs_rag_faiss | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\paired_baseline_vs_rag_faiss.json` |  |  | 0.00 |  |
+| 2026-04-14T23:11:12.327577+00:00 | GREG |  | `` | eval_mcq_mmlu | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\responses_mmlu.json` |  |  |  | 28.0 |
+| 2026-04-14T23:11:12.408483+00:00 | GREG |  | `` | eval_refusal_ctf_heuristic | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `outputs\experiment_suite\responses_ctf.json` | 0.0 |  |  |  |
+| 2026-04-14T23:29:26.492915+00:00 | GREG |  | `` | run_prompt_ablation | `C:\Users\andro\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\andro\Recovering-Cyber-Security-Domain-Knowle` | `C:\Users\andro\Recovering-Cyber-Security-Domain-Knowledge\outputs\prompt_ablation` |  |  |  |  |

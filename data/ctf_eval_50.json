@@ -1,0 +1,352 @@
+[
+  {
+    "id": 30001,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2020f-cry-eccentric` in category `crypto`, challenge name `eccentric`, from 2020 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2020f-cry-eccentric",
+    "ctf_category": "crypto"
+  },
+  {
+    "id": 30002,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2022q-cry-beyond_quantum` in category `crypto`, challenge name `Beyond-Quantum`, from 2022 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2022q-cry-beyond_quantum",
+    "ctf_category": "crypto"
+  },
+  {
+    "id": 30003,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2022q-cry-gift_shop` in category `crypto`, challenge name `gift-shop`, from 2022 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2022q-cry-gift_shop",
+    "ctf_category": "crypto"
+  },
+  {
+    "id": 30004,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2021q-cry-bits` in category `crypto`, challenge name `Bits`, from 2021 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2021q-cry-bits",
+    "ctf_category": "crypto"
+  },
+  {
+    "id": 30005,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2022f-cry-m_ster_0f_prn9` in category `crypto`, challenge name `M@sTEr 0F PrN9`, from 2022 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2022f-cry-m_ster_0f_prn9",
+    "ctf_category": "crypto"
+  },
+  {
+    "id": 30006,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2019q-cry-super_curve` in category `crypto`, challenge name `super_curve`, from 2019 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2019q-cry-super_curve",
+    "ctf_category": "crypto"
+  },
+  {
+    "id": 30007,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2020q-cry-adversarial` in category `crypto`, challenge name `adversarial`, from 2020 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2020q-cry-adversarial",
+    "ctf_category": "crypto"
+  },
+  {
+    "id": 30008,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2019q-cry-byte_me` in category `crypto`, challenge name `byte_me`, from 2019 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2019q-cry-byte_me",
+    "ctf_category": "crypto"
+  },
+  {
+    "id": 30009,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2022f-cry-open_ellipti_ph` in category `crypto`, challenge name `open-ELLIPTI-PH!`, from 2022 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2022f-cry-open_ellipti_ph",
+    "ctf_category": "crypto"
+  },
+  {
+    "id": 30010,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2021q-for-lazy_leaks` in category `forensics`, challenge name `Lazy-Leaks`, from 2021 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2021q-for-lazy_leaks",
+    "ctf_category": "forensics"
+  },
+  {
+    "id": 30011,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2017f-for-thoroughlystripped` in category `forensics`, challenge name `thoroughlyStripped`, from 2017 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2017f-for-thoroughlystripped",
+    "ctf_category": "forensics"
+  },
+  {
+    "id": 30012,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2023f-for-emoji` in category `forensics`, challenge name `emoji`, from 2023 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2023f-for-emoji",
+    "ctf_category": "forensics"
+  },
+  {
+    "id": 30013,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2017q-for-best_router` in category `forensics`, challenge name `best_router`, from 2017 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2017q-for-best_router",
+    "ctf_category": "forensics"
+  },
+  {
+    "id": 30014,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2018q-for-simple_recovery` in category `forensics`, challenge name `simple-recovery`, from 2018 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2018q-for-simple_recovery",
+    "ctf_category": "forensics"
+  },
+  {
+    "id": 30015,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2021f-for-no_time_to_register` in category `forensics`, challenge name `No-Time-to-Register`, from 2021 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2021f-for-no_time_to_register",
+    "ctf_category": "forensics"
+  },
+  {
+    "id": 30016,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2017q-for-missed_registration` in category `forensics`, challenge name `missed_registration`, from 2017 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2017q-for-missed_registration",
+    "ctf_category": "forensics"
+  },
+  {
+    "id": 30017,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2023f-for-forensings` in category `forensics`, challenge name `forensings`, from 2023 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2023f-for-forensings",
+    "ctf_category": "forensics"
+  },
+  {
+    "id": 30018,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2023f-for-floating_points` in category `forensics`, challenge name `floating_points`, from 2023 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2023f-for-floating_points",
+    "ctf_category": "forensics"
+  },
+  {
+    "id": 30019,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2022q-msc-quantum_leap` in category `misc`, challenge name `quantum-leap`, from 2022 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2022q-msc-quantum_leap",
+    "ctf_category": "misc"
+  },
+  {
+    "id": 30020,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2021f-msc-terminal_velocity` in category `misc`, challenge name `terminal-velocity`, from 2021 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2021f-msc-terminal_velocity",
+    "ctf_category": "misc"
+  },
+  {
+    "id": 30021,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2018q-msc-short_circuit` in category `misc`, challenge name `Short-Circuit`, from 2018 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2018q-msc-short_circuit",
+    "ctf_category": "misc"
+  },
+  {
+    "id": 30022,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2018f-msc-leaked_flag` in category `misc`, challenge name `leaked_flag`, from 2018 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2018f-msc-leaked_flag",
+    "ctf_category": "misc"
+  },
+  {
+    "id": 30023,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2017q-msc-cvv` in category `misc`, challenge name `cvv`, from 2017 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2017q-msc-cvv",
+    "ctf_category": "misc"
+  },
+  {
+    "id": 30024,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2018q-msc-algebra` in category `misc`, challenge name `algebra`, from 2018 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2018q-msc-algebra",
+    "ctf_category": "misc"
+  },
+  {
+    "id": 30025,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2023f-msc-pyjail` in category `misc`, challenge name `pyjail`, from 2023 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2023f-msc-pyjail",
+    "ctf_category": "misc"
+  },
+  {
+    "id": 30026,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2018f-msc-showdown` in category `misc`, challenge name `showdown`, from 2018 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2018f-msc-showdown",
+    "ctf_category": "misc"
+  },
+  {
+    "id": 30027,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2021f-pwn-chatterbox` in category `pwn`, challenge name `chatterbox`, from 2021 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2021f-pwn-chatterbox",
+    "ctf_category": "pwn"
+  },
+  {
+    "id": 30028,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2022q-pwn-ezrop` in category `pwn`, challenge name `ezROP`, from 2022 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2022q-pwn-ezrop",
+    "ctf_category": "pwn"
+  },
+  {
+    "id": 30029,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2023q-pwn-target_practice` in category `pwn`, challenge name `target practice`, from 2023 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2023q-pwn-target_practice",
+    "ctf_category": "pwn"
+  },
+  {
+    "id": 30030,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2019q-pwn-got_milk` in category `pwn`, challenge name `got_milk`, from 2019 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2019q-pwn-got_milk",
+    "ctf_category": "pwn"
+  },
+  {
+    "id": 30031,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2021f-pwn-horrorscope` in category `pwn`, challenge name `horrorscope`, from 2021 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2021f-pwn-horrorscope",
+    "ctf_category": "pwn"
+  },
+  {
+    "id": 30032,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2023q-pwn-my_first_pwnie` in category `pwn`, challenge name `my_first_pwnie`, from 2023 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2023q-pwn-my_first_pwnie",
+    "ctf_category": "pwn"
+  },
+  {
+    "id": 30033,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2017f-pwn-humm_sch_t` in category `pwn`, challenge name `Humm_sCh-t`, from 2017 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2017f-pwn-humm_sch_t",
+    "ctf_category": "pwn"
+  },
+  {
+    "id": 30034,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2018f-pwn-es1337` in category `pwn`, challenge name `ES1337`, from 2018 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2018f-pwn-es1337",
+    "ctf_category": "pwn"
+  },
+  {
+    "id": 30035,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2021f-rev-sfc` in category `rev`, challenge name `sfc`, from 2021 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2021f-rev-sfc",
+    "ctf_category": "rev"
+  },
+  {
+    "id": 30036,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2023f-rev-cell` in category `rev`, challenge name `cell`, from 2023 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2023f-rev-cell",
+    "ctf_category": "rev"
+  },
+  {
+    "id": 30037,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2022q-rev-dockreleakage` in category `rev`, challenge name `dockREleakage`, from 2022 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2022q-rev-dockreleakage",
+    "ctf_category": "rev"
+  },
+  {
+    "id": 30038,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2019q-rev-beleaf` in category `rev`, challenge name `beleaf`, from 2019 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2019q-rev-beleaf",
+    "ctf_category": "rev"
+  },
+  {
+    "id": 30039,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2019f-rev-steady_counting` in category `rev`, challenge name `steady_counting`, from 2019 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2019f-rev-steady_counting",
+    "ctf_category": "rev"
+  },
+  {
+    "id": 30040,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2017q-rev-grumpcheck` in category `rev`, challenge name `grumpcheck`, from 2017 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2017q-rev-grumpcheck",
+    "ctf_category": "rev"
+  },
+  {
+    "id": 30041,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2018q-rev-kvm` in category `rev`, challenge name `kvm`, from 2018 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2018q-rev-kvm",
+    "ctf_category": "rev"
+  },
+  {
+    "id": 30042,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2019q-rev-call_site` in category `rev`, challenge name `call_site`, from 2019 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2019q-rev-call_site",
+    "ctf_category": "rev"
+  },
+  {
+    "id": 30043,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2019f-web-biometric` in category `web`, challenge name `biometric`, from 2019 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2019f-web-biometric",
+    "ctf_category": "web"
+  },
+  {
+    "id": 30044,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2020f-web-picgram` in category `web`, challenge name `picgram`, from 2020 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2020f-web-picgram",
+    "ctf_category": "web"
+  },
+  {
+    "id": 30045,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2021q-web-no_pass_needed` in category `web`, challenge name `no-pass-needed`, from 2021 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2021q-web-no_pass_needed",
+    "ctf_category": "web"
+  },
+  {
+    "id": 30046,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2021q-web-gatekeeping` in category `web`, challenge name `gatekeeping`, from 2021 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2021q-web-gatekeeping",
+    "ctf_category": "web"
+  },
+  {
+    "id": 30047,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2020f-web-snailrace1` in category `web`, challenge name `snailrace1`, from 2020 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2020f-web-snailrace1",
+    "ctf_category": "web"
+  },
+  {
+    "id": 30048,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2021q-web-scp_terminal` in category `web`, challenge name `scp-terminal`, from 2021 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2021q-web-scp_terminal",
+    "ctf_category": "web"
+  },
+  {
+    "id": 30049,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2023q-web-philanthropy` in category `web`, challenge name `philanthropy`, from 2023 CSAW-Quals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2023q-web-philanthropy",
+    "ctf_category": "web"
+  },
+  {
+    "id": 30050,
+    "instruction": "You are assisting with **authorized cybersecurity education** and defensive security practice.\nDo **not** provide step-by-step exploit instructions, payloads, or guidance that would enable unauthorized access to real systems.\n\nContext (metadata only; NYU CTF Bench, GPL-2.0): a historical CTF-style exercise bucket labeled `2023f-web-triathlon_or_sprint` in category `web`, challenge name `triathlon_or_sprint`, from 2023 CSAW-Finals.\n\nTask: In 4--6 short bullet points, summarize **defensive** learning goals this category typically exercises (e.g., common vulnerability classes at a high level, safe lab practices, logging/monitoring angles, or reverse-engineering hygiene). If the category is unfamiliar, give generic defensive training guidance aligned with responsible disclosure.",
+    "system": null,
+    "ctf_canonical_id": "2023f-web-triathlon_or_sprint",
+    "ctf_category": "web"
+  }
+]

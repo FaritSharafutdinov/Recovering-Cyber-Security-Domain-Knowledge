@@ -13,8 +13,8 @@ from pathlib import Path
 
 import torch
 from datasets import Dataset
-from peft import LoraConfig, get_peft_model, TaskType
-from transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, TaskType
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, Trainer, TrainingArguments
 
 
 def load_subset(data_path: str, n: int):
@@ -34,6 +34,11 @@ def main():
     p.add_argument("--data_path", default="data/baseline_outputs.json")
     p.add_argument("--n_train", type=int, default=5, help="Number of instruction-response pairs from the start of the file.")
     p.add_argument("--model_name", default="TinyLlama/TinyLlama-1.1B-Chat-v1.0")
+    p.add_argument(
+        "--load_in_4bit",
+        action="store_true",
+        help="QLoRA-style 4-bit base weights (bitsandbytes). Use the same --model_name as inference.py --model_id.",
+    )
     p.add_argument(
         "--save_adapter",
         action="store_true",
@@ -60,11 +65,23 @@ def main():
     train_data = load_subset(args.data_path, args.n_train)
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name)
-    model = AutoModelForCausalLM.from_pretrained(
-        args.model_name,
-        torch_dtype=torch.float32,
-        device_map="auto" if torch.cuda.is_available() else None,
-    )
+    use_cuda = torch.cuda.is_available()
+    if args.load_in_4bit:
+        if not use_cuda:
+            raise RuntimeError("--load_in_4bit requires CUDA (bitsandbytes GPU path).")
+        bnb = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.float16)
+        model = AutoModelForCausalLM.from_pretrained(
+            args.model_name,
+            quantization_config=bnb,
+            device_map="auto",
+        )
+        model = prepare_model_for_kbit_training(model)
+    else:
+        model = AutoModelForCausalLM.from_pretrained(
+            args.model_name,
+            torch_dtype=torch.float32,
+            device_map="auto" if use_cuda else None,
+        )
 
     def tokenize(examples):
         return tokenizer(
@@ -95,6 +112,10 @@ def main():
         task_type=TaskType.CAUSAL_LM,
     )
     model = get_peft_model(model, lora)
+    if args.load_in_4bit:
+        model.enable_input_require_grads()
+        if hasattr(model, "config"):
+            model.config.use_cache = False
 
     targs = TrainingArguments(
         output_dir=str(out_dir),
@@ -104,6 +125,8 @@ def main():
         save_strategy="no",
         report_to="none",
         seed=args.seed,
+        fp16=bool(use_cuda and args.load_in_4bit),
+        gradient_checkpointing=bool(args.load_in_4bit),
     )
     trainer = Trainer(model=model, args=targs, train_dataset=train_data)
     trainer.train()
@@ -131,6 +154,7 @@ def main():
 
     meta = {
         "model_name": args.model_name,
+        "load_in_4bit": bool(args.load_in_4bit),
         "data_path": args.data_path,
         "n_train": args.n_train,
         "save_adapter": bool(args.save_adapter),
